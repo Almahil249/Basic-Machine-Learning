@@ -4,6 +4,7 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.svm import SVR
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.neighbors import KNeighborsRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 
 
@@ -98,15 +99,21 @@ y_pred_forest = forest_regressor.predict(X_test)
 r2_scoreForest = r2_score(y_test, y_pred_forest)
 mseForest = mean_squared_error(y_test, y_pred_forest)
 
+# Model 5: KNN Regressor
+knn_regressor = KNeighborsRegressor(n_neighbors = 5)
+knn_regressor.fit(X_train, y_train)
+
+y_pred_knn = knn_regressor.predict(X_test)
+r2_scoreKNN = r2_score(y_test, y_pred_knn)
+mseKNN = mean_squared_error(y_test, y_pred_knn)
 
 
 # print the results
-print("\n###########################################\n")
-
 print("Linear Regression: Mean Squared Error: ",mseRegression)
 print("SVR_linear Mean Squared Error: ",mseSVM)
 print("SVR_RBF Mean Squared Error: ",mseSVM_RBF)
 print("Random Forest: Mean Squared Error: ",mseForest)
+print("KNN: Mean Squared Error: ",mseKNN)
 
 print("\n###########################################\n")
 
@@ -115,20 +122,12 @@ print("Linear Regression: R2 Score: ",r2_scoreRegression)
 print("SVR_linear R2 Score: ",r2_scoreSVM)
 print("SVR_RBF R2 Score: ",r2_scoreSVM_RBF)
 print("Random Forest: R2 Score: ",r2_scoreForest)
-
-print("\n###########################################\n")
+print("KNN: R2 Score: ",r2_scoreKNN)
 
 # print the most accurate model
-if mseRegression < mseSVM and mseRegression < mseSVM_RBF and mseRegression < mseForest:
-    print("\nLinear Regression is the most accurate model")
-
-elif mseSVM < mseRegression and mseSVM < mseSVM_RBF and mseSVM < mseForest:
-    print("\nSVR_linear is the most accurate model")
-
-elif mseSVM_RBF < mseRegression and mseSVM_RBF < mseSVM and mseSVM_RBF < mseForest:
-    print("\nSVR_RBF is the most accurate model")
-
-else:
-    print("\nRandom Forest is the most accurate model")
-
+models = {"Linear Regression": mseRegression, "SVR Linear": mseSVM, "SVR RBF": mseSVM_RBF, "Random Forest": mseForest, "KNN": mseKNN}
+bestModel = min(models, key=models.get)
+print("\n###########################################\n")
+print("The best model is: ", bestModel)
+print("\n###########################################\n")
 
